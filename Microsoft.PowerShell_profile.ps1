@@ -15,8 +15,12 @@ Import-Module z
 Import-Module $root\Modules\psake\src\psake.psd1
 Import-Module $root\Modules\posh-docker\posh-docker\posh-docker.psd1
 
-Set-PSReadlineOption -TokenKind Command -ForegroundColor Yellow
-Set-PSReadlineOption -TokenKind Keyword -ForegroundColor Cyan
+Set-PSReadLineOption -Colors @{
+    "Error" = [ConsoleColor]::DarkRed
+    "Keyword" = [ConsoleColor]::Cyan
+    "Command" = [ConsoleColor]::Yellow
+    "String" = [ConsoleColor]::Magenta
+}
 
 . "$root/PsakeTabExpansion.ps1"
 . "$root/CreateAliases.ps1"
