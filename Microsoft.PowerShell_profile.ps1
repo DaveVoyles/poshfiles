@@ -7,7 +7,7 @@ if ((Test-Path "$root\Modules\psake") -and ($env:path.IndexOf("$($root)\Modules\
     $env:path="$env:path;$root\Modules\psake"
 }
 Import-Module "$root\modules\posh-git\src\posh-git.psd1"
-Start-SshAgent -Quiet
+Start-SshAgent -Quiet 2>&1 | Out-Null                        #Some process that start a powershell process threats this output as an error.
 Import-Module "$root\modules\oh-my-posh\oh-my-posh.psm1" #don't import the psd1, it has an incorrect string in the version field
 set-theme Mesh
 if (Get-Command colortool -ErrorAction Ignore) { colortool --quiet campbell }
