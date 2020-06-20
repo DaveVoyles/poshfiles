@@ -12,6 +12,7 @@ Add-Alias push 'git push'
 Add-Alias pull 'git pull'
 Add-Alias log 'git log'
 Add-Alias ci 'git commit'
+Add-Alias cia 'git commit --amend'
 Add-Alias co 'git checkout'
 Add-Alias dif 'git diff'
 Add-Alias rs 'git reset'
@@ -27,7 +28,4 @@ Add-Alias gitbash '. "C:\Program Files\Git\usr\bin\bash.exe"'
 Add-Alias ccat "pygmentize.exe -g -O style=vs -f console16m"
 if (Get-Command hub -ErrorAction Ignore) {
     Add-Alias git "$($(Get-Command hub).Source)"
-}
-if (Get-Command curl -CommandType Application -ErrorAction Ignore) { #use system curl if available
-    Remove-Item alias:curl
 }

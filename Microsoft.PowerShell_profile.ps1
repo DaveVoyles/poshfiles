@@ -1,6 +1,28 @@
 $root = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
-if ((Test-Path "$env:ProgramFiles\Git\usr\bin") -and ($env:path.IndexOf("$($env:ProgramFiles)\Git\usr\bin", [StringComparison]::CurrentCultureIgnoreCase) -lt 0)) { # enable ssh-agent from posh-git
+
+#install choco if not present
+if (-not (Get-Command choco -ErrorAction Ignore)){
+    $InstallDir='C:\ProgramData\chocoportable'
+    $env:ChocolateyInstall="$InstallDir"
+    Set-ExecutionPolicy Bypass -Scope Process -Force;
+    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+}
+#Install/Upgrade git using choco
+if (-not (Get-Command git -ErrorAction Ignore)) {
+    choco install git
+}else{
+    choco upgrade git
+}
+
+ # enable ssh-agent from posh-git
+if ((Test-Path "$env:ProgramFiles\Git\usr\bin") -and ($env:path.IndexOf("$($env:ProgramFiles)\Git\usr\bin", [StringComparison]::CurrentCultureIgnoreCase) -lt 0)) {
     $env:path="$env:path;$env:ProgramFiles\Git\usr\bin"
+}
+
+#Az - Manage Azure Resources
+if (-not (Get-Module -ListAvailable -Name Az))
+{
+  Install-Module -Name Az -Force
 }
 
 if ((Test-Path "$root\Modules\psake") -and ($env:path.IndexOf("$($root)\Modules\psake", [StringComparison]::CurrentCultureIgnoreCase) -lt 0)) {
@@ -9,7 +31,7 @@ if ((Test-Path "$root\Modules\psake") -and ($env:path.IndexOf("$($root)\Modules\
 Import-Module "$root\modules\posh-git\src\posh-git.psd1"
 Start-SshAgent -Quiet 2>&1 | Out-Null                        #Some process that start a powershell process threats this output as an error.
 Import-Module "$root\modules\oh-my-posh\oh-my-posh.psm1" #don't import the psd1, it has an incorrect string in the version field
-set-theme Mesh
+Set-Theme Mesh
 if (Get-Command colortool -ErrorAction Ignore) { colortool --quiet campbell }
 Import-Module z
 Import-Module $root\Modules\psake\src\psake.psd1
@@ -29,6 +51,12 @@ $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 if (Test-Path $ChocolateyProfile) {
     Import-Module "$ChocolateyProfile"
 }
+
+#install vscode
+if (-not (Get-Command code -ErrorAction Ignore)) {
+    choco install vscode
+}
+git config --global core.editor "code --wait"
 
 if (Get-Command vim -ErrorAction Ignore) {
     Set-PSReadlineOption -EditMode Vi
