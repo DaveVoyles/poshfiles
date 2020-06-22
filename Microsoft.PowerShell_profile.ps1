@@ -9,9 +9,8 @@ if (-not (Get-Command choco -ErrorAction Ignore)){
 }
 #Install/Upgrade git using choco
 if (-not (Get-Command git -ErrorAction Ignore)) {
-    choco install git
-}else{
-    choco upgrade git
+    Write-Host "Attention GIT not installed"
+    Write-Host "Run 'choco install git'"
 }
 
  # enable ssh-agent from posh-git
@@ -54,9 +53,11 @@ if (Test-Path $ChocolateyProfile) {
 
 #install vscode
 if (-not (Get-Command code -ErrorAction Ignore)) {
-    choco install vscode
+    Write-Host "Attention GIT not installed"
+    Write-Host "Run 'choco install vscode'"
+}else{
+    git config --global core.editor "code --wait"
 }
-git config --global core.editor "code --wait"
 
 if (Get-Command vim -ErrorAction Ignore) {
     Set-PSReadlineOption -EditMode Vi
