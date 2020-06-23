@@ -21,7 +21,7 @@ if ((Test-Path "$env:ProgramFiles\Git\usr\bin") -and ($env:path.IndexOf("$($env:
 #Az - Manage Azure Resources
 if (-not (Get-Module -ListAvailable -Name Az))
 {
-  Install-Module -Name Az -Force
+  Install-Module -Name Az -Force -AllowClobber
 }
 
 if ((Test-Path "$root\Modules\psake") -and ($env:path.IndexOf("$($root)\Modules\psake", [StringComparison]::CurrentCultureIgnoreCase) -lt 0)) {
